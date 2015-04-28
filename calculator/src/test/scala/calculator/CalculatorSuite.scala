@@ -51,4 +51,6 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(resultRed2() == "red")
   }
 
+
+  test("")
 }
