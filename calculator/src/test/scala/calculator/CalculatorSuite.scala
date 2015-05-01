@@ -51,6 +51,20 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(resultRed2() == "red")
   }
 
+  /** *****************
+    ** CALCULATOR **
+    * *************** */
 
-  test("")
+
+  test("cyclic dependencies should result in NAN"){
+      val references : Map[String,Signal[Expr]] = Map("a"->Signal(Ref("b")),"b"->Signal(Ref("a")))
+    val e: Double = Calculator.eval(Ref("a"), references)
+    assert(e equals Double.NaN)
+  }
+
+  test("dependency for a variable with literal"){
+    val references : Map[String,Signal[Expr]] = Map("a"->Signal(Ref("b")),"b"->Signal(Literal(2)))
+    val e: Double = Calculator.eval(Ref("a"), references)
+    assert(e == 2)
+  }
 }

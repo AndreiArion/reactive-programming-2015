@@ -14,7 +14,7 @@ object Polynomial {
       val bb = b()
       val cc = c()
       if (d==0) {Set(-bb/2*aa)}
-      else if(d>0) Set(-bb-Math.sqrt(d)/2*aa,-bb+Math.sqrt(d)/2*aa)
+      else if(d>0) Set((-bb+Math.sqrt(d))/2*aa,(-bb-Math.sqrt(d))/2*aa)
       else if(d==d)Set.empty else Set.empty
     }
   }
