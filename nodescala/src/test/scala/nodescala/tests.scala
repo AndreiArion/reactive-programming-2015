@@ -31,6 +31,29 @@ class NodeScalaSuite extends FunSuite {
     }
   }
 
+
+  test("A Future should be completed after 1s delay") {
+    val start = System.currentTimeMillis()
+
+    Future.delay(1 second) onComplete { case _ =>
+      val duration = System.currentTimeMillis() - start
+      assert (duration >= 1000L && duration < 1100L)
+    }
+  }
+
+  test("Two sequential delays of 1s should delay by 2s") {
+    val start = System.currentTimeMillis()
+
+    val combined = for {
+      f1 <- Future.delay(1 second)
+      f2 <- Future.delay(1 second)
+    } yield ()
+
+    combined onComplete { case _ =>
+      val duration = System.currentTimeMillis() - start
+      assert (duration >= 2000L && duration < 2100L)
+    }
+  }
   
   
   class DummyExchange(val request: Request) extends Exchange {
