@@ -54,6 +54,26 @@ class NodeScalaSuite extends FunSuite {
       assert (duration >= 2000L && duration < 2100L)
     }
   }
+
+
+  test("Test of running a run"){
+    val working = Future.run() { ct =>
+      Future {
+        while (ct.nonCancelled) {
+          println("working")
+        }
+        println("done")
+      }
+    }
+    Future.delay(5 seconds) onSuccess {
+      case _ => {
+        Console println "Unsuscribing"
+        working.unsubscribe()
+      }
+    }
+    Thread.sleep(10000)
+
+  }
   
   
   class DummyExchange(val request: Request) extends Exchange {

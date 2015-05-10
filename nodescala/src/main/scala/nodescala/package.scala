@@ -61,11 +61,11 @@ package object nodescala {
     /** Returns a future with a unit value that is completed after time `t`.
      */
     def delay(t: Duration): Future[Unit] = {
-      /*Future(
+      Future(
       blocking {
         Thread.sleep(t.toMillis)
-      })*/
-      Future(Await.result(Future(()=>Thread.sleep(50000)),t))
+      })
+      //Future(Await.result(Future(()=>Thread.sleep(50000)),t))
     }
     /** Completes this future with user input.
      */
@@ -77,7 +77,11 @@ package object nodescala {
 
     /** Creates a cancellable context for an execution and runs it.
      */
-    def run()(f: CancellationToken => Future[Unit]): Subscription = ???
+    def run()(f: CancellationToken => Future[Unit]): Subscription = {
+      val res = CancellationTokenSource()
+      f(res.cancellationToken).onComplete(t=>Console println ("Future completed"))
+      res
+    }
 
   }
 
