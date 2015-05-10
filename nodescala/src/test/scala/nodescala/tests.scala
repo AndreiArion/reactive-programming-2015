@@ -65,13 +65,13 @@ class NodeScalaSuite extends FunSuite {
         println("done")
       }
     }
-    Future.delay(5 seconds) onSuccess {
+    Future.delay(1 seconds) onSuccess {
       case _ => {
         Console println "Unsuscribing"
         working.unsubscribe()
       }
     }
-    Thread.sleep(10000)
+    Thread.sleep(3000)
 
   }
   
