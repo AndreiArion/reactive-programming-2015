@@ -42,16 +42,19 @@ class NodeScalaSuite extends FunSuite {
   }
 
   test("Two sequential delays of 1s should delay by 2s") {
-    val start = System.currentTimeMillis()
+    for(i <- 1 to 20) {
+      val start = System.currentTimeMillis()
+      Console println "Start "+ i +" "+ start
+      val combined = for {
+        f1 <- Future.delay(1 second)
+        f2 <- Future.delay(1 second)
+      } yield ()
 
-    val combined = for {
-      f1 <- Future.delay(1 second)
-      f2 <- Future.delay(1 second)
-    } yield ()
-
-    combined onComplete { case _ =>
-      val duration = System.currentTimeMillis() - start
-      assert (duration >= 2000L && duration < 2100L)
+      combined onComplete { case _ =>
+        val duration = System.currentTimeMillis() - start
+        assert(duration >= 2000L && duration < 2100L)
+          Console println "Done one test" + System.currentTimeMillis()
+      }
     }
   }
 

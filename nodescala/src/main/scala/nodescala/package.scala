@@ -62,9 +62,8 @@ package object nodescala {
      */
     def delay(t: Duration): Future[Unit] = {
       Future(
-      blocking {
         Thread.sleep(t.toMillis)
-      })
+      )
       //Future(Await.result(Future(()=>Thread.sleep(50000)),t))
     }
     /** Completes this future with user input.
