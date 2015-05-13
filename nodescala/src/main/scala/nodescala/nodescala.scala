@@ -30,17 +30,13 @@ trait NodeScala {
    *  @param body         the response to write back
    */
   private def respond(exchange: Exchange, token: CancellationToken, response: Response): Unit = {
-    val working = Future.run(){ ct =>
-      Future{
         for {
           chunk <- response
-          if (ct.nonCancelled)
+          if (token.nonCancelled )
         }{
           exchange.write(chunk)
         }
         exchange.close()
-      }
-    }
   }
 
   /** A server:
@@ -54,7 +50,25 @@ trait NodeScala {
    *  @return               a subscription that can stop the server and all its asynchronous operations *entirely*
    */
   def start(relativePath: String)(handler: Request => Response): Subscription = {
-
+    val listener = createListener(relativePath)
+    val listenerSubscription = listener.start()
+    val queryLoopSubscription = Future.run(){
+      ct =>
+        Future {
+          while (ct.nonCancelled) {
+            val nextWork = listener.nextRequest()
+            async{
+              //Console println "Spanning thread " + Thread.currentThread().getId
+              val query = await(nextWork)
+              println("responding to query"+query._1)
+              respond(query._2,ct,handler(query._1))
+            }
+            //Console println "Waiting new request"
+          }
+          //println("done")
+        }
+    }
+    Subscription(listenerSubscription,queryLoopSubscription)
   }
 
 }

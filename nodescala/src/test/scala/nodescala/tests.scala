@@ -56,13 +56,13 @@ class NodeScalaSuite extends FunSuite {
   }
 
 
-  test("Test of running a run"){
+/*  test("Test of running a run"){
     val working = Future.run() { ct =>
       Future {
         while (ct.nonCancelled) {
-          println("working")
+         // println("working")
         }
-        println("done")
+       // println("done")
       }
     }
     Future.delay(1 seconds) onSuccess {
@@ -73,8 +73,16 @@ class NodeScalaSuite extends FunSuite {
     }
     Thread.sleep(3000)
 
-  }
-  
+  }*/
+
+
+/*  test("continueWith"){
+    val t :Future[String] = Future.delay(1 seconds) continueWith {
+      f=> "ServerTimeout"}
+    t.onComplete(t=>Console print(t))
+
+    Thread.sleep(3000)
+  }*/
   
   class DummyExchange(val request: Request) extends Exchange {
     @volatile var response = ""
@@ -141,7 +149,7 @@ class NodeScalaSuite extends FunSuite {
     }
 
     // wait until server is really installed
-    Thread.sleep(500)
+    Thread.sleep(1500)
 
     def test(req: Request) {
       val webpage = dummy.emit("/testDir", req)
